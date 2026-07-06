@@ -10,8 +10,8 @@ The purpose of creating this software is to practice setting up a TypeScript env
 
 # Development Environment
 
-I used Visual Studio Code as my editor, Node.js as the runtime, and the TypeScript compiler (tsc) to transpile TypeScript into JavaScript.  
-The programming language used is TypeScript, which adds static typing and modern features to JavaScript.
+I used **Visual Studio Code** as my editor, **Node.js** as the runtime, and the **TypeScript compiler (tsc)** to transpile TypeScript into JavaScript.  
+The programming language used is **TypeScript**, which adds static typing and modern features to JavaScript.
 
 # Useful Websites
 
