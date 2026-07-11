@@ -1,0 +1,24 @@
+{
+  "name": "hello-world-ts",
+  "version": "1.0.0",
+  "description": "Community Skill Exchange API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dzowera/hello-world-ts.git"
+  },
+  "keywords": [
+    "Community",
+    "Skills",
+    "Exchange"
+  ],
+  "author": "Innocent Dzowera",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dzowera/hello-world-ts/issues"
+  },
+  "homepage": "https://github.com/dzowera/hello-world-ts#readme"
+}
