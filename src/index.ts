@@ -2,7 +2,8 @@ import express, {Request, Response} from "express";
 import dotenv from "dotenv";
 import { connectDB } from "./config/connectdb";
 import userRoutes from "./routes/userRoutes";
-import skillRoutes from "./routes/skillRoutes"
+import skillRoutes from "./routes/skillRoutes";
+import { setupSwagger } from "./swagger";
 dotenv.config()
 
 const app = express()
@@ -16,6 +17,7 @@ app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 
 // Routes
+setupSwagger(app);
 app.use("/api/users", userRoutes);
 app.use("/api/skills", skillRoutes)
 

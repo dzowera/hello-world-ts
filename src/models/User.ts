@@ -12,17 +12,14 @@ const UserSchema = new Schema<IUser>({
 });
 
 // Pre-save hook for hashing
-UserSchema.pre("save" as any, async function (this: any, next: any) {
-  const user = this as IUser;
-
-  if (!user.isModified("password")) return next();
+UserSchema.pre("save", async function (this: IUser) {
+  if (!this.isModified("password")) return;
 
   try {
     const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(user.password, salt);
-    next();
+    this.password = await bcrypt.hash(this.password, salt);
   } catch (err) {
-    next(err);
+    throw err;
   }
 });
 
