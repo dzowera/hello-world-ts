@@ -14,7 +14,7 @@ const options = {
             version: "1.0.0",
             description: "API documentation for the Community Skill Exchange application",
         },
-        servers: [{ url: "http://localhost:3000" }],
+        servers: [{ url: process.env.SWAGGER_SERVER_URL || "/" }],
         components: {
             securitySchemes: {
                 bearerAuth: {
@@ -35,7 +35,8 @@ const setupSwagger = (app) => {
     });
     app.use("/api-docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerSpec, {
         swaggerOptions: {
-            url: "/api-docs/swagger.json",
+            url: "/swagger.json",
+            persistAuthorization: true,
         },
     }));
 };
