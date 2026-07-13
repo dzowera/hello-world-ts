@@ -1,100 +1,116 @@
-import {Request, Response} from "express"
+import { Request, Response } from "express";
 import { AuthenticatedRequest } from "../middleware/auth.middleware";
-import Skill from "../models/Skill"
-import { Types } from "mongoose"
+import Skill from "../models/Skill";
+import { Types } from "mongoose";
 
-export const getSkills = async (req: Request, res: Response) =>{
+export const getSkills = async (req: Request, res: Response) => {
   try {
     // Here you would typically fetch skills from the database
     const skills = await Skill.find();
-    res.status(200).json({message: "Skills fetched successfully", skills});
-    
-  }catch (err) {
-    res.status(500).json({message: "Error fetching skills", error: err})
+    res.status(200).json({ message: "Skills fetched successfully", skills });
+  } catch (err) {
+    res.status(500).json({ message: "Error fetching skills", error: err });
   }
-}
+};
 
 export const addSkill = async (req: AuthenticatedRequest, res: Response) => {
-  const {name, description, category, typeOfSkill} = req.body;
+  const { name, description, category, typeOfSkill } = req.body;
   const userId = req.userId;
-  if(!name || !description || !category || !typeOfSkill){
-    return res.status(400).json({message: "Please provide all required fields"})
+  if (!name || !description || !category || !typeOfSkill) {
+    return res
+      .status(400)
+      .json({ message: "Please provide all required fields" });
   }
-  if(!userId){
-    return res.status(401).json({message: "Unauthorized"})
+  if (!userId) {
+    return res.status(401).json({ message: "Unauthorized" });
   }
   try {
-    const skill = await Skill.create({name, description, category, typeOfSkill, userId});
-    if(!skill){
-      return res.status(400).json({message: "Error adding skill"})
+    const skill = await Skill.create({
+      name,
+      description,
+      category,
+      typeOfSkill,
+      userId,
+    });
+    if (!skill) {
+      return res.status(400).json({ message: "Error adding skill" });
     }
-    res.status(201).json({message: "Skill added successfully", skill});
+    res.status(201).json({ message: "Skill added successfully", skill });
   } catch (err) {
-    res.status(500).json({message: "Error adding skill", error: err})
+    res.status(500).json({ message: "Error adding skill", error: err });
   }
-}
+};
 
 export const findSkillById = async (req: Request, res: Response) => {
   const { id } = req.params as { id: string };
-  if(!Types.ObjectId.isValid(id)){
-    return res.status(400).json({message: "Invalid skill ID"})
+  if (!Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ message: "Invalid skill ID" });
   }
   try {
     const skill = await Skill.findById(id);
-    if(!skill){
-      return res.status(404).json({message: "Skill not found"})
+    if (!skill) {
+      return res.status(404).json({ message: "Skill not found" });
     }
-    res.status(200).json({message: "Skill found", skill});
-  } catch(err){
-    res.status(500).json({message: "Error finding skill", error: err})
+    res.status(200).json({ message: "Skill found", skill });
+  } catch (err) {
+    res.status(500).json({ message: "Error finding skill", error: err });
   }
-}
+};
 
 export const updateSkill = async (req: AuthenticatedRequest, res: Response) => {
   const { id } = req.params as { id: string };
-  const {name, description, category, typeOfSkill} = req.body;
+  const { name, description, category, typeOfSkill } = req.body;
   const userId = req.userId;
 
-  if(!id){
-    return res.status(400).json({message: "Skill ID is required"})
+  if (!id) {
+    return res.status(400).json({ message: "Skill ID is required" });
   }
 
-  try{
+  try {
     const skill = await Skill.findById(id);
-    if(!skill){
-      return res.status(404).json({message: "Skill not found"})
+    if (!skill) {
+      return res.status(404).json({ message: "Skill not found" });
     }
 
-    if(skill.userId.toString() !== userId){
-      return res.status(403).json({message: "You are not authorized to update this skill"})
+    if (skill.userId.toString() !== userId) {
+      return res
+        .status(403)
+        .json({ message: "You are not authorized to update this skill" });
     }
 
-    await Skill.findByIdAndUpdate(id, {name, description, category, typeOfSkill}, {new: true});
-    res.status(200).json({message: "Skill updated successfully"});
-
-  }catch(err){
-    return res.status(500).json({message: "Error updating skill", error: err})
+    await Skill.findByIdAndUpdate(
+      id,
+      { name, description, category, typeOfSkill },
+      { new: true },
+    );
+    res.status(200).json({ message: "Skill updated successfully" });
+  } catch (err) {
+    return res
+      .status(500)
+      .json({ message: "Error updating skill", error: err });
   }
-}
+};
 
-export const deleteSkill = async (req: AuthenticatedRequest, res: Response) =>{
+export const deleteSkill = async (req: AuthenticatedRequest, res: Response) => {
   const { id } = req.params as { id: string };
   const userId = req.userId;
-try{
-  const skill = await Skill.findById(id);
-  if(!skill){
-    return res.status(404).json({message: "Skill not found"})
+  try {
+    const skill = await Skill.findById(id);
+    if (!skill) {
+      return res.status(404).json({ message: "Skill not found" });
+    }
+
+    if (skill.userId.toString() !== userId) {
+      return res
+        .status(403)
+        .json({ message: "You are not authorized to delete this skill" });
+    }
+
+    await Skill.findByIdAndDelete(id);
+    res.status(200).json({ message: "Skill deleted successfully" });
+  } catch (err) {
+    return res
+      .status(500)
+      .json({ message: "Error deleting skill", error: err });
   }
-
-  if(skill.userId.toString() !== userId){
-    return res.status(403).json({message: "You are not authorized to delete this skill"})
-  }
-
-  await Skill.findByIdAndDelete(id);
-  res.status(200).json({message: "Skill deleted successfully"});
-
-}catch(err){
-  return res.status(500).json({message: "Error deleting skill", error: err})
-}
-  
-}
+};

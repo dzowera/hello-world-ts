@@ -1,7 +1,8 @@
-import { Request, Response } from "express"
-import bcrypt from "bcrypt"
-import jwt from "jsonwebtoken"
-import User from "../models/User"
+import { Request, Response } from "express";
+import { AuthenticatedRequest } from "../middleware/auth.middleware";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import User from "../models/User";
 
 
 // register a user
@@ -59,4 +60,25 @@ export const logoutUser = async (req: Request, res: Response) =>{
   } catch (err) {
     res.status(500).json({message: "Error logging out", error: err})
   }
+}
+
+export const deleteUser = async (req: AuthenticatedRequest, res: Response) => {
+  const userId = req.userId;
+  const userRole = req.userRole;
+  if (!userId) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+  if (!userRole || userRole !== "admin") {
+    return res.status(403).json({ message: "Insufficient permissions" });
+  }
+  try {
+    const deletedUser = await User.findByIdAndDelete(req.params.id);
+    if (!deletedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.status(200).json({ message: "User deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Error deleting user", error });
+  }
+
 }

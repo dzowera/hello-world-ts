@@ -2,7 +2,7 @@ import express, {Request, Response} from "express";
 import dotenv from "dotenv";
 import { connectDB } from "../config/connectdb";
 import userRoutes from "../routes/userRoutes";
-
+import skillRoutes from "../routes/skillRoutes"
 dotenv.config()
 
 const app = express()
@@ -17,7 +17,7 @@ app.use(express.urlencoded({extended: true}))
 
 // Routes
 app.use("/api/users", userRoutes);
-
+app.use("/api/skills", skillRoutes)
 
 app.get("/", (req: Request, res:Response) =>{
   res.send("Hello from Community Skill Exchange API")

@@ -3,6 +3,7 @@ import jwt, {JwtPayload} from "jsonwebtoken";
 
 export interface AuthenticatedRequest extends Request {
   userId?: string;
+  userRole?: "user" | "admin";
 }
 
 export const authenticateToken = (req: AuthenticatedRequest, res: Response, next: NextFunction) =>{
@@ -16,6 +17,7 @@ export const authenticateToken = (req: AuthenticatedRequest, res: Response, next
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as JwtPayload;
     req.userId = decoded.id;
+    req.userRole = decoded.role;
     next();
   } catch (err) {
     res.status(403).json({message: "Invalid token", error: err})
