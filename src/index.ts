@@ -1,8 +1,8 @@
 import express, {Request, Response} from "express";
 import dotenv from "dotenv";
-import { connectDB } from "../config/connectdb";
-import userRoutes from "../routes/userRoutes";
-import skillRoutes from "../routes/skillRoutes"
+import { connectDB } from "./config/connectdb";
+import userRoutes from "./routes/userRoutes";
+import skillRoutes from "./routes/skillRoutes"
 dotenv.config()
 
 const app = express()
