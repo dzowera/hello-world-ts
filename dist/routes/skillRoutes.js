@@ -70,6 +70,21 @@ const auth_middleware_1 = require("../middleware/auth.middleware");
  *         required: true
  *         schema:
  *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               category:
+ *                 type: string
+ *               typeOfSkill:
+ *                 type: string
  *     responses:
  *       200:
  *         description: Skill updated successfully
