@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteUser = exports.logoutUser = exports.loginUser = exports.registerUser = void 0;
+const auth_middleware_1 = require("../middleware/auth.middleware");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const mongoose_1 = __importDefault(require("mongoose"));
@@ -61,8 +62,8 @@ const logoutUser = async (req, res) => {
     try {
         const authHeader = req.headers["authorization"];
         const token = authHeader && authHeader.split(" ")[1];
-        if (!token) {
-            return res.status(401).json({ message: "No token provided" });
+        if (token) {
+            (0, auth_middleware_1.revokeToken)(token);
         }
         return res.status(200).json({ message: "User logged out successfully" });
     }

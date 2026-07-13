@@ -6,6 +6,14 @@ export interface AuthenticatedRequest extends Request {
   userRole?: "user" | "admin";
 }
 
+const revokedTokens = new Set<string>();
+
+export const revokeToken = (token: string) => {
+  revokedTokens.add(token);
+};
+
+export const isTokenRevoked = (token: string) => revokedTokens.has(token);
+
 export const authenticateToken = (
   req: AuthenticatedRequest,
   res: Response,
@@ -16,6 +24,10 @@ export const authenticateToken = (
 
   if (!token) {
     return res.status(401).json({ message: "No token provided" });
+  }
+
+  if (isTokenRevoked(token)) {
+    return res.status(401).json({ message: "Token revoked" });
   }
 
   try {

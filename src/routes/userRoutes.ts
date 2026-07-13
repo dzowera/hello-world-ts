@@ -64,13 +64,9 @@ import requireAdmin from "../middleware/role.middleware";
  *   post:
  *     summary: Logout a user
  *     tags: [Users]
- *     security:
- *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: User logged out successfully
- *       401:
- *         description: No token provided
  */
 
 /**

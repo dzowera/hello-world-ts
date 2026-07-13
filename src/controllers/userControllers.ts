@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { AuthenticatedRequest } from "../middleware/auth.middleware";
+import { AuthenticatedRequest, revokeToken } from "../middleware/auth.middleware";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
@@ -71,8 +71,8 @@ export const logoutUser = async (req: Request, res: Response) => {
     const authHeader = req.headers["authorization"];
     const token = authHeader && authHeader.split(" ")[1];
 
-    if (!token) {
-      return res.status(401).json({ message: "No token provided" });
+    if (token) {
+      revokeToken(token);
     }
 
     return res.status(200).json({ message: "User logged out successfully" });
