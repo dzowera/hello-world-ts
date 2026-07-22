@@ -1,12 +1,15 @@
 import { Request, Response } from "express";
 import { AuthenticatedRequest } from "../middleware/auth.middleware";
+import { countSkillsRecursively } from "../utils/skillUtils";
 import Skill from "../models/Skill";
 import { Types } from "mongoose";
 
 export const getSkills = async (req: Request, res: Response) => {
   try {
     const skills = await Skill.find();
-    return res.status(200).json({ message: "Skills fetched successfully", skills });
+    // count all the skills
+    const count = countSkillsRecursively(skills)
+    return res.status(200).json({ message: "Skills fetched successfully", skills, "Total Skils": count});
   } catch (err) {
     return res.status(500).json({ message: "Error fetching skills", error: err });
   }
